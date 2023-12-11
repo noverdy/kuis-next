@@ -1,16 +1,10 @@
-export default function Home() {
-  const quizzes = [
-    {
-      id: '1',
-      title: 'Elementary Math',
-      description: 'Test your elementary math skills.',
-    },
-    {
-      id: '2',
-      title: 'Science Challenge',
-      description: 'Test your science knowledge.',
-    },
-  ]
+import connectDB from '@/lib/db'
+import quizModel from '@/models/quizModel'
+import Link from 'next/link'
+
+export default async function Home() {
+  await connectDB()
+  const quizzes = await quizModel.find({})
 
   return (
     <main className='p-5 lg:p-16'>
@@ -25,16 +19,15 @@ export default function Home() {
       <section>
         <ul>
           {quizzes.map((quiz) => (
-            <li
-              key={quiz.id}
-              className='mb-6 flex cursor-pointer items-center justify-between rounded-3xl bg-white/20 p-4 transition-all hover:bg-white/30 lg:p-8'
-            >
-              <div>
-                <h4 className='mb-1 text-lg lg:text-2xl'>{quiz.title}</h4>
-                <p className='text-sm lg:text-base'>{quiz.description}</p>
-              </div>
-              <p className='text-2xl'>&gt;</p>
-            </li>
+            <Link href={`/quiz/${quiz._id}`} key={quiz._id}>
+              <li className='mb-6 flex cursor-pointer items-center justify-between rounded-3xl bg-white/20 p-4 transition-all hover:bg-white/30 lg:p-8'>
+                <div>
+                  <h4 className='mb-1 text-lg lg:text-2xl'>{quiz.title}</h4>
+                  <p className='text-sm lg:text-base'>{quiz.description}</p>
+                </div>
+                <p className='text-2xl'>&gt;</p>
+              </li>
+            </Link>
           ))}
         </ul>
       </section>
