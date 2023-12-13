@@ -2,6 +2,7 @@ import connectDB from '@/lib/db'
 import quizModel from '@/models/quizModel'
 import { isValidObjectId } from 'mongoose'
 import Link from 'next/link'
+import StartForm from './StartForm'
 
 export default async function Detail({ params }) {
   await connectDB()
@@ -37,12 +38,7 @@ export default async function Detail({ params }) {
         <p className='text-lg'>Description:</p>
         <p>{quiz.description}</p>
       </main>
-      <Link
-        href={`/quiz/${quizId}/question/1`}
-        className='rounded-3xl bg-green-500/60 p-4 text-center transition-colors hover:bg-green-500/80'
-      >
-        Start Quiz
-      </Link>
+      <StartForm quizId={quizId} />
     </div>
   )
 }
