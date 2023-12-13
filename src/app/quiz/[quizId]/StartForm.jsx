@@ -20,6 +20,7 @@ export default function StartForm({ quizId }) {
         name='name'
         className='grow rounded-3xl bg-white/30 px-8'
         placeholder='Your name'
+        required
       />
       <button
         type='submit'
