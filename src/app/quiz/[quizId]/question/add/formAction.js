@@ -1,14 +1,23 @@
 'use server'
 
 import quizModel from '@/models/quizModel'
-import { cookies } from 'next/headers'
-import { revalidatePath } from 'next/cache'
 
 export default async function action(formData, quizId) {
+  const file = formData.get('attachment')
+  let attachment = null
+  if (file.size > 0) {
+    const base64String = Buffer.from(await file.arrayBuffer()).toString(
+      'base64'
+    )
+    const mimeType = file.type
+    attachment = `data:${mimeType};base64,${base64String}`
+  }
+
   const question = {
     title: formData.get('title'),
     options: [],
     answers: [],
+    attachment,
   }
 
   formData.forEach((v, k) => {
@@ -19,16 +28,14 @@ export default async function action(formData, quizId) {
       question.answers.push(parseInt(k.split('-')[1]))
     }
   })
+
   const err = await quizModel.findByIdAndUpdate(quizId, {
     $push: {
       questions: question,
     },
   })
 
-  console.log(err)
+  if (err) console.log(err)
 
-  cookies().set('toast', 'Questions added successfully.', {
-    expires: new Date(Date.now() + 3 * 1000), // 3 seconds
-  })
-  revalidatePath(`/quiz/${quizId}/question/add`)
+  return 'Question added successfully.'
 }

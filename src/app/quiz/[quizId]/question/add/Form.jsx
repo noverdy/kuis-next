@@ -10,12 +10,14 @@ export default function Form({ quizId }) {
       correct: false,
     },
   ])
+  const [response, setResponse] = useState('')
 
   return (
     <form
       onSubmit={async (event) => {
         event.preventDefault()
-        await formAction(new FormData(event.target), quizId)
+        const res = await formAction(new FormData(event.target), quizId)
+        setResponse(res)
       }}
     >
       <label htmlFor='title' className='mb-2 block text-xl lg:text-2xl'>
@@ -27,6 +29,17 @@ export default function Form({ quizId }) {
         type='text'
         placeholder='Question Title'
         className='text-md mb-4 w-full rounded-3xl bg-white/30 p-4 lg:text-xl'
+      />
+      <label htmlFor='attachment' className='mb-2 block text-xl lg:text-2xl'>
+        Question Attachment
+      </label>
+      <input
+        id='attachment'
+        name='attachment'
+        type='file'
+        accept='image/*,video/*,audio/*'
+        placeholder='Question Attachment'
+        className='text-md mb-4 w-full rounded-3xl bg-white/30 p-4 file:border-transparent file:rounded-xl'
       />
       <label htmlFor='answers' className='mb-2 block text-xl lg:text-2xl'>
         Answers
@@ -91,6 +104,7 @@ export default function Form({ quizId }) {
       >
         Submit
       </button>
+      <span className='ml-2'>{response}</span>
     </form>
   )
 }

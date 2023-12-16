@@ -28,6 +28,10 @@ const schema = new mongoose.Schema({
           required: true,
         },
       ],
+      attachment: {
+        type: String,
+        required: false,
+      },
     },
   ],
 })
