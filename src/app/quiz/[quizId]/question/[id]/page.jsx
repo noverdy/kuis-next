@@ -51,17 +51,14 @@ export default async function Question({ params }) {
 function MediaRenderer({ base64Data }) {
   if (!base64Data) return null;
 
-  // Extract MIME type and Base64 content
-  const [mimeType, content] = base64Data.match(/^data:(.*);base64,(.*)$/).slice(1);
+  const [mimeType, _] = base64Data.match(/^data:(.*);base64,(.*)$/).slice(1);
 
-  // Decide the media type and render accordingly
   if (mimeType.startsWith('image/')) {
     return <Image src={base64Data} alt='Uploaded Content' width={256} height={256} />
   } else if (mimeType.startsWith('video/')) {
     return (
-      <video controls>
-        <source src={base64Data} type={mimeType} />
-        Your browser does not support the video tag.
+      <video src={base64Data} width={256} height={256} controls>
+        Your browser does not support HTML5 video.
       </video>
     );
   } else if (mimeType.startsWith('audio/')) {

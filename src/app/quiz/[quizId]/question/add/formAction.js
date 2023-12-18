@@ -29,13 +29,11 @@ export default async function action(formData, quizId) {
     }
   })
 
-  const err = await quizModel.findByIdAndUpdate(quizId, {
+  await quizModel.findByIdAndUpdate(quizId, {
     $push: {
       questions: question,
     },
   })
-
-  if (err) console.log(err)
 
   return 'Question added successfully.'
 }
